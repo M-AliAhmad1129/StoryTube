@@ -1,0 +1,333 @@
+/* ===========================
+   STORY TUBE STYLE SHEET
+=========================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:#FFF8E7;
+    color:#333;
+}
+
+/* Navigation */
+
+header{
+    width:100%;
+    background:#2E7D32;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 8%;
+    position:sticky;
+    top:0;
+    z-index:1000;
+    box-shadow:0 3px 10px rgba(0,0,0,.2);
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+}
+
+.logo img{
+    width:70px;
+    margin-right:15px;
+}
+
+.logo h1{
+    color:white;
+    font-size:32px;
+}
+
+nav ul{
+    list-style:none;
+    display:flex;
+}
+
+nav ul li{
+    margin-left:30px;
+}
+
+nav ul li a{
+    text-decoration:none;
+    color:white;
+    font-weight:600;
+    transition:.3s;
+}
+
+nav ul li a:hover{
+    color:#FFD54F;
+}
+
+/* Hero */
+
+.hero{
+    text-align:center;
+    padding:100px 20px;
+    background:linear-gradient(#66BB6A,#43A047);
+    color:white;
+}
+
+.hero h2{
+    font-size:55px;
+    margin-bottom:20px;
+}
+
+.hero p{
+    font-size:20px;
+    width:70%;
+    margin:auto;
+    line-height:1.8;
+}
+
+.btn{
+    display:inline-block;
+    margin-top:35px;
+    padding:15px 40px;
+    background:#FFD54F;
+    color:#333;
+    text-decoration:none;
+    border-radius:40px;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.btn:hover{
+    transform:scale(1.08);
+}
+
+/* Search */
+
+.search{
+    text-align:center;
+    margin:50px;
+}
+
+.search input{
+    width:60%;
+    padding:18px;
+    border-radius:40px;
+    border:2px solid #43A047;
+    font-size:18px;
+}
+
+/* Story Section */
+
+.section-title{
+    text-align:center;
+    font-size:40px;
+    margin-bottom:50px;
+    color:#2E7D32;
+}
+
+.story-container{
+    width:90%;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:35px;
+    margin-bottom:80px;
+}
+
+.story-card{
+    background:white;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+    transition:.4s;
+}
+
+.story-card:hover{
+    transform:translateY(-12px);
+}
+
+.story-card img{
+    width:100%;
+    height:230px;
+    object-fit:cover;
+}
+
+.story-card h3{
+    padding:20px;
+    color:#2E7D32;
+}
+
+.story-card p{
+    padding:0 20px 20px;
+    line-height:1.7;
+}
+
+.story-card a{
+    display:block;
+    text-align:center;
+    margin:20px;
+    padding:12px;
+    background:#43A047;
+    color:white;
+    text-decoration:none;
+    border-radius:10px;
+    transition:.3s;
+}
+
+.story-card a:hover{
+    background:#2E7D32;
+}
+
+/* Footer */
+
+footer{
+    background:#2E7D32;
+    color:white;
+    text-align:center;
+    padding:40px;
+}
+
+footer h2{
+    margin-bottom:15px;
+}
+
+footer p{
+    margin:10px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+header{
+    flex-direction:column;
+    padding:10px 6%;
+}
+
+.logo img{
+    width:42px;
+    margin-right:10px;
+}
+
+.logo h1{
+    font-size:20px;
+}
+
+nav ul{
+    flex-direction:row;
+    flex-wrap:wrap;
+    justify-content:center;
+    text-align:center;
+    margin-top:8px;
+    gap:6px 18px;
+}
+
+nav ul li{
+    margin:0;
+}
+
+nav ul li a{
+    font-size:14px;
+}
+
+.hero h2{
+    font-size:36px;
+}
+
+.hero p{
+    width:95%;
+}
+
+.search input{
+    width:90%;
+}
+
+.featured{
+    padding:30px 20px;
+}
+
+.featured-box{
+    flex-direction:column;
+    padding:20px;
+    gap:20px;
+}
+
+.featured-box img{
+    width:100%;
+    max-width:280px;
+    margin:auto;
+}
+
+}
+
+@media(max-width:400px){
+
+header{
+    padding:8px 5%;
+}
+
+.logo img{
+    width:34px;
+    margin-right:6px;
+}
+
+.logo h1{
+    font-size:17px;
+}
+
+nav ul{
+    gap:4px 12px;
+    margin-top:6px;
+}
+
+nav ul li a{
+    font-size:12px;
+}
+
+}.featured{
+
+padding:60px;
+
+}
+
+.featured h2{
+
+text-align:center;
+margin-bottom:40px;
+font-size:40px;
+color:#2E7D32;
+
+}
+
+.featured-box{
+
+display:flex;
+gap:40px;
+background:white;
+padding:30px;
+border-radius:20px;
+box-shadow:0 5px 20px rgba(0,0,0,.15);
+
+}
+
+.featured-box img{
+
+width:350px;
+border-radius:15px;
+
+}
+
+.featured-box h3{
+
+font-size:35px;
+margin-bottom:20px;
+
+}
+
+.featured-box p{
+
+font-size:20px;
+line-height:1.8;
+
+}

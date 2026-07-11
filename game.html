@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Play Tic Tac Toe | Story Tube</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ===========================
+   TIC TAC TOE (scoped to #ttt-app
+   so it never clashes with the
+   site-wide stylesheet)
+=========================== */
+
+#ttt-app{
+font-family:'Poppins',sans-serif;
+max-width:520px;
+margin:0 auto 70px;
+background:white;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,.15);
+padding:35px 25px;
+text-align:center;
+color:#333;
+}
+
+#ttt-app .page{
+animation:tttFadeIn .35s ease;
+}
+
+@keyframes tttFadeIn{
+0%{opacity:0;transform:translateY(8px);}
+100%{opacity:1;transform:translateY(0);}
+}
+
+#ttt-app .menu-label{
+font-size:13px;
+text-transform:uppercase;
+letter-spacing:1px;
+color:#777;
+margin:14px 0 6px;
+font-weight:600;
+}
+
+#ttt-app button{
+padding:9px 16px;
+margin:4px;
+font-size:15px;
+cursor:pointer;
+border:none;
+border-radius:20px;
+background:#43A047;
+color:white;
+font-family:'Poppins',sans-serif;
+transition:.25s;
+}
+
+#ttt-app button:hover{
+background:#2E7D32;
+transform:scale(1.05);
+}
+
+#ttt-app button.active{
+background:#FFD54F;
+color:#333;
+box-shadow:0 0 0 2px #F9A825 inset;
+}
+
+#ttt-app #startBtn{
+background:#FFD54F;
+color:#333;
+font-weight:bold;
+padding:11px 28px;
+}
+
+#ttt-app #startBtn:hover{
+background:#F9A825;
+}
+
+#ttt-app #homeBtn{
+background:#9e9e9e;
+}
+
+#ttt-app #homeBtn:hover{
+background:#757575;
+}
+
+#ttt-app .hidden{
+display:none !important;
+}
+
+#ttt-app .scoreboard{
+display:flex;
+justify-content:space-around;
+margin:16px 0;
+font-size:18px;
+font-weight:600;
+color:#2E7D32;
+}
+
+#ttt-app .board{
+display:grid;
+gap:8px;
+margin:auto;
+justify-content:center;
+}
+
+#ttt-app .cell{
+background:#FFF8E7;
+border:2px solid #C8E6C9;
+display:flex;
+justify-content:center;
+align-items:center;
+cursor:pointer;
+border-radius:12px;
+transition:.2s;
+user-select:none;
+font-weight:bold;
+color:#2E7D32;
+}
+
+#ttt-app .cell:hover{
+background:#F1F8E9;
+}
+
+#ttt-app .cell.win{
+background:#43A047;
+border-color:#2E7D32;
+color:white;
+animation:tttPop .5s;
+}
+
+@keyframes tttPop{
+0%{transform:scale(.5);}
+100%{transform:scale(1);}
+}
+
+#ttt-app #status{
+margin-top:18px;
+font-size:20px;
+font-weight:bold;
+min-height:30px;
+color:#2E7D32;
+}
+
+#ttt-app .controls{
+margin-top:16px;
+}
+
+@media(max-width:480px){
+
+#ttt-app{
+padding:20px 12px;
+margin-bottom:40px;
+}
+
+#ttt-app .menu-label{
+font-size:11px;
+}
+
+#ttt-app button{
+padding:7px 12px;
+font-size:13px;
+}
+
+#ttt-app #startBtn{
+padding:9px 20px;
+font-size:14px;
+}
+
+#ttt-app .scoreboard{
+font-size:15px;
+}
+
+#ttt-app .board{
+gap:5px;
+}
+
+#ttt-app #status{
+font-size:16px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ================= NAVIGATION ================= -->
+
+<header>
+
+<div class="logo">
+
+<img src="logo.png" alt="Story Tube Logo">
+
+<h1>Story Tube</h1>
+
+</div>
+
+<nav>
+
+<ul>
+
+<li><a href="index.html">Home</a></li>
+
+<li><a href="index.html#stories">Stories</a></li>
+
+<li><a href="game.html">Game</a></li>
+
+<li><a href="about.html">About</a></li>
+
+</ul>
+
+</nav>
+
+</header>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+<h2>Take a Fun Break</h2>
+
+<p>
+
+Finished a story? Sharpen your mind with a quick game
+of Tic Tac Toe before you read the next one.
+
+</p>
+
+</section>
+
+
+<!-- ================= GAME ================= -->
+
+<section style="padding:60px 20px 20px;">
+
+<h2 class="section-title">Tic Tac Toe</h2>
+
+<div id="ttt-app">
+
+<!-- ===================== HOME PAGE ===================== -->
+<div id="homeView" class="page">
+
+<div class="menu">
+
+<div class="menu-label">Mode</div>
+<button id="singleBtn" class="opt">Single Player</button>
+<button id="multiBtn" class="opt">Two Players</button>
+
+<div class="menu-label">Board Size</div>
+<button id="size3Btn" class="opt sizeOpt active">3 x 3</button>
+<button id="size4Btn" class="opt sizeOpt">4 x 4</button>
+<button id="size5Btn" class="opt sizeOpt">5 x 5</button>
+
+<div class="menu-label diffLabel hidden">Difficulty</div>
+<div id="diffGroup" class="hidden">
+<button id="easyBtn" class="opt diffOpt">Easy</button>
+<button id="mediumBtn" class="opt diffOpt">Medium</button>
+<button id="hardBtn" class="opt diffOpt">Hard</button>
+<button id="impossibleBtn" class="opt diffOpt">Impossible</button>
+</div>
+
+<div style="margin-top:16px;">
+<button id="startBtn">Start Game</button>
+</div>
+
+</div>
+
+<div class="scoreboard">
+
+<div>X :
+<span id="xScoreHome">0</span>
+</div>
+
+<div>O :
+<span id="oScoreHome">0</span>
+</div>
+
+<div>Draw :
+<span id="drawScoreHome">0</span>
+</div>
+
+</div>
+
+</div>
+
+<!-- ===================== GAME PAGE ===================== -->
+<div id="gameView" class="page hidden">
+
+<div class="scoreboard">
+
+<div>X :
+<span id="xScore">0</span>
+</div>
+
+<div>O :
+<span id="oScore">0</span>
+</div>
+
+<div>Draw :
+<span id="drawScore">0</span>
+</div>
+
+</div>
+
+<div class="board" id="board"></div>
+
+<div id="status">
+Choose a mode, size and difficulty, then press Start
+</div>
+
+<div class="controls">
+
+<button id="restartBtn">
+Restart
+</button>
+
+<button id="homeBtn">
+Home
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+<footer>
+
+<h2>Story Tube</h2>
+
+<p>📚 Read • 🌱 Learn • ⭐ Grow</p>
+
+<p>
+
+Thank you for visiting Story Tube.
+
+</p>
+
+<p>
+
+© 2026 Story Tube
+
+</p>
+
+</footer>
+
+<script src="script.js"></script>
+
+<script>
+
+const board=document.getElementById("board");
+const statusText=document.getElementById("status");
+const restartBtn=document.getElementById("restartBtn");
+const startBtn=document.getElementById("startBtn");
+
+const singleBtn=document.getElementById("singleBtn");
+const multiBtn=document.getElementById("multiBtn");
+
+const size3Btn=document.getElementById("size3Btn");
+const size4Btn=document.getElementById("size4Btn");
+const size5Btn=document.getElementById("size5Btn");
+
+const diffGroup=document.getElementById("diffGroup");
+const diffLabel=document.querySelector(".diffLabel");
+const easyBtn=document.getElementById("easyBtn");
+const mediumBtn=document.getElementById("mediumBtn");
+const hardBtn=document.getElementById("hardBtn");
+const impossibleBtn=document.getElementById("impossibleBtn");
+
+const xScoreEl=document.getElementById("xScore");
+const oScoreEl=document.getElementById("oScore");
+const drawScoreEl=document.getElementById("drawScore");
+
+const xScoreHomeEl=document.getElementById("xScoreHome");
+const oScoreHomeEl=document.getElementById("oScoreHome");
+const drawScoreHomeEl=document.getElementById("drawScoreHome");
+
+const homeView=document.getElementById("homeView");
+const gameView=document.getElementById("gameView");
+const homeBtn=document.getElementById("homeBtn");
+
+let boardSize=3;
+let winLength=3;
+let winPatterns=[];
+
+let gameBoard=[];
+let cells=[];
+
+let currentPlayer="X";
+let running=false;
+let singlePlayer=false;
+let difficulty="hard";
+
+let scoreX=0;
+let scoreO=0;
+let scoreDraw=0;
+
+// ---------- Cell size per board size (responsive) ----------
+function getSizeConfig(size){
+
+const w=window.innerWidth;
+const isSmall=w<=480;
+const isTiny=w<=340;
+
+const configs={
+3:{cell:isTiny?78:isSmall?92:120, font:isTiny?34:isSmall?42:60},
+4:{cell:isTiny?58:isSmall?70:92, font:isTiny?24:isSmall?30:44},
+5:{cell:isTiny?46:isSmall?54:72, font:isTiny?18:isSmall?22:34}
+};
+
+return configs[size];
+
+}
+
+// ---------- Mode selection ----------
+
+singleBtn.onclick=()=>{
+singlePlayer=true;
+singleBtn.classList.add("active");
+multiBtn.classList.remove("active");
+diffGroup.classList.remove("hidden");
+diffLabel.classList.remove("hidden");
+};
+
+multiBtn.onclick=()=>{
+singlePlayer=false;
+multiBtn.classList.add("active");
+singleBtn.classList.remove("active");
+diffGroup.classList.add("hidden");
+diffLabel.classList.add("hidden");
+};
+
+singleBtn.classList.add("active");
+singlePlayer=true;
+diffGroup.classList.remove("hidden");
+diffLabel.classList.remove("hidden");
+
+// ---------- Board size selection ----------
+
+function selectSize(size,btn){
+boardSize=size;
+document.querySelectorAll(".sizeOpt").forEach(b=>b.classList.remove("active"));
+btn.classList.add("active");
+}
+
+size3Btn.onclick=()=>selectSize(3,size3Btn);
+size4Btn.onclick=()=>selectSize(4,size4Btn);
+size5Btn.onclick=()=>selectSize(5,size5Btn);
+
+// ---------- Difficulty selection ----------
+
+function selectDifficulty(level,btn){
+difficulty=level;
+document.querySelectorAll(".diffOpt").forEach(b=>b.classList.remove("active"));
+btn.classList.add("active");
+}
+
+easyBtn.onclick=()=>selectDifficulty("easy",easyBtn);
+mediumBtn.onclick=()=>selectDifficulty("medium",mediumBtn);
+hardBtn.onclick=()=>selectDifficulty("hard",hardBtn);
+impossibleBtn.onclick=()=>selectDifficulty("impossible",impossibleBtn);
+
+hardBtn.classList.add("active");
+
+// ---------- Start / Restart ----------
+
+startBtn.onclick=startGame;
+restartBtn.onclick=()=>{
+if(cells.length===0) return;
+resetBoard();
+};
+
+function startGame(){
+
+winLength = boardSize===3 ? 3 : 4;
+winPatterns = generateWinPatterns(boardSize,winLength);
+
+buildBoardDOM();
+
+resetBoard();
+
+goToGame();
+}
+
+function goToGame(){
+homeView.classList.add("hidden");
+gameView.classList.remove("hidden");
+}
+
+function goHome(){
+homeView.classList.remove("hidden");
+gameView.classList.add("hidden");
+running=false;
+}
+
+homeBtn.onclick=goHome;
+
+window.addEventListener("resize",()=>{
+if(!gameView.classList.contains("hidden") && cells.length>0){
+const cfg=getSizeConfig(boardSize);
+board.style.gridTemplateColumns=`repeat(${boardSize}, ${cfg.cell}px)`;
+cells.forEach(cell=>{
+cell.style.width=cfg.cell+"px";
+cell.style.height=cfg.cell+"px";
+cell.style.fontSize=cfg.font+"px";
+});
+}
+});
+
+function buildBoardDOM(){
+
+board.innerHTML="";
+const cfg=getSizeConfig(boardSize);
+
+board.style.gridTemplateColumns=`repeat(${boardSize}, ${cfg.cell}px)`;
+
+cells=[];
+
+for(let i=0;i<boardSize*boardSize;i++){
+
+const cell=document.createElement("div");
+cell.classList.add("cell");
+cell.dataset.index=i;
+cell.style.width=cfg.cell+"px";
+cell.style.height=cfg.cell+"px";
+cell.style.fontSize=cfg.font+"px";
+cell.addEventListener("click",cellClicked);
+
+board.appendChild(cell);
+cells.push(cell);
+
+}
+
+}
+
+function resetBoard(){
+
+gameBoard=new Array(boardSize*boardSize).fill("");
+
+cells.forEach(cell=>{
+cell.textContent="";
+cell.classList.remove("win");
+});
+
+currentPlayer="X";
+running=true;
+statusText.textContent="Player X Turn";
+
+}
+
+// ---------- Win pattern generation ----------
+
+function generateWinPatterns(size,length){
+
+const patterns=[];
+const directions=[[0,1],[1,0],[1,1],[1,-1]];
+
+for(let r=0;r<size;r++){
+for(let c=0;c<size;c++){
+for(const [dr,dc] of directions){
+
+const endR=r+dr*(length-1);
+const endC=c+dc*(length-1);
+
+if(endR<0||endR>=size||endC<0||endC>=size) continue;
+
+const pattern=[];
+for(let k=0;k<length;k++){
+pattern.push((r+dr*k)*size+(c+dc*k));
+}
+patterns.push(pattern);
+
+}
+}
+}
+
+return patterns;
+
+}
+
+// ---------- Gameplay ----------
+
+function cellClicked(){
+
+if(!running) return;
+
+const index=this.dataset.index;
+
+if(gameBoard[index]!="") return;
+
+gameBoard[index]=currentPlayer;
+this.textContent=currentPlayer;
+
+checkWinner();
+
+if(singlePlayer && running && currentPlayer=="O"){
+setTimeout(botMove,300);
+}
+
+}
+
+function changePlayer(){
+currentPlayer=currentPlayer=="X"?"O":"X";
+statusText.textContent="Player "+currentPlayer+" Turn";
+}
+
+function checkWinner(){
+
+let roundWon=false;
+let winningPattern=null;
+
+for(const pattern of winPatterns){
+
+const first=gameBoard[pattern[0]];
+if(first==="") continue;
+
+let allMatch=true;
+for(let i=1;i<pattern.length;i++){
+if(gameBoard[pattern[i]]!==first){
+allMatch=false;
+break;
+}
+}
+
+if(allMatch){
+roundWon=true;
+winningPattern=pattern;
+break;
+}
+
+}
+
+if(roundWon){
+
+winningPattern.forEach(index=>{
+cells[index].classList.add("win");
+});
+
+statusText.textContent="Player "+currentPlayer+" Wins!";
+running=false;
+
+if(currentPlayer=="X"){
+scoreX++;
+xScoreEl.textContent=scoreX;
+xScoreHomeEl.textContent=scoreX;
+}else{
+scoreO++;
+oScoreEl.textContent=scoreO;
+oScoreHomeEl.textContent=scoreO;
+}
+
+return;
+}
+
+if(!gameBoard.includes("")){
+statusText.textContent="It's a Draw!";
+running=false;
+scoreDraw++;
+drawScoreEl.textContent=scoreDraw;
+drawScoreHomeEl.textContent=scoreDraw;
+return;
+}
+
+changePlayer();
+
+}
+
+// ---------- Bot ----------
+
+function getEmptyIndices(b){
+const empty=[];
+for(let i=0;i<b.length;i++){
+if(b[i]==="") empty.push(i);
+}
+return empty;
+}
+
+function findWinningMove(b,player){
+
+for(const pattern of winPatterns){
+
+const values=pattern.map(i=>b[i]);
+const playerCount=values.filter(v=>v===player).length;
+const emptyCount=values.filter(v=>v==="").length;
+
+if(playerCount===pattern.length-1 && emptyCount===1){
+const emptyIndex=pattern.find(i=>b[i]==="");
+return emptyIndex;
+}
+
+}
+
+return -1;
+
+}
+
+function botMove(){
+
+if(!running) return;
+
+let move=-1;
+
+if(difficulty==="easy"){
+
+move=randomMove(gameBoard);
+
+}else if(difficulty==="medium"){
+
+if(Math.random()<0.8){
+move=findWinningMove(gameBoard,"O");
+if(move===-1) move=findWinningMove(gameBoard,"X");
+}
+if(move===-1) move=randomMove(gameBoard);
+
+}else{
+
+// hard / impossible -> minimax based
+const maxDepth=getMaxDepth();
+move=bestMinimaxMove(gameBoard,maxDepth);
+
+}
+
+if(move===-1 || move===undefined) return;
+
+gameBoard[move]="O";
+cells[move].textContent="O";
+
+checkWinner();
+
+}
+
+function randomMove(b){
+const empty=getEmptyIndices(b);
+if(empty.length===0) return -1;
+return empty[Math.floor(Math.random()*empty.length)];
+}
+
+function getMaxDepth(){
+
+// Full search for 3x3 is fast (perfect play).
+// Larger boards need a depth cap to stay responsive.
+
+if(boardSize===3){
+return difficulty==="impossible" ? Infinity : 4;
+}
+
+if(boardSize===4){
+return difficulty==="impossible" ? 4 : 2;
+}
+
+// 5x5
+return difficulty==="impossible" ? 3 : 2;
+
+}
+
+function bestMinimaxMove(b,maxDepth){
+
+let bestScore=-Infinity;
+let move=-1;
+const empty=getEmptyIndices(b);
+
+for(const i of empty){
+
+b[i]="O";
+const score=minimax(b,1,false,-Infinity,Infinity,maxDepth);
+b[i]="";
+
+if(score>bestScore){
+bestScore=score;
+move=i;
+}
+
+}
+
+return move;
+
+}
+
+function minimax(b,depth,isMaximizing,alpha,beta,maxDepth){
+
+const result=evaluateTerminal(b);
+
+if(result!==null){
+if(result===10) return result-depth;
+if(result===-10) return result+depth;
+return 0;
+}
+
+if(depth>=maxDepth){
+return heuristic(b);
+}
+
+if(isMaximizing){
+
+let best=-Infinity;
+
+for(const i of getEmptyIndices(b)){
+
+b[i]="O";
+const score=minimax(b,depth+1,false,alpha,beta,maxDepth);
+b[i]="";
+
+best=Math.max(best,score);
+alpha=Math.max(alpha,best);
+if(beta<=alpha) break;
+
+}
+
+return best;
+
+}else{
+
+let best=Infinity;
+
+for(const i of getEmptyIndices(b)){
+
+b[i]="X";
+const score=minimax(b,depth+1,true,alpha,beta,maxDepth);
+b[i]="";
+
+best=Math.min(best,score);
+beta=Math.min(beta,best);
+if(beta<=alpha) break;
+
+}
+
+return best;
+
+}
+
+}
+
+function evaluateTerminal(b){
+
+for(const pattern of winPatterns){
+
+const first=b[pattern[0]];
+if(first==="") continue;
+
+let allMatch=true;
+for(let i=1;i<pattern.length;i++){
+if(b[pattern[i]]!==first){
+allMatch=false;
+break;
+}
+}
+
+if(allMatch){
+return first==="O" ? 10 : -10;
+}
+
+}
+
+if(getEmptyIndices(b).length===0) return 0;
+
+return null;
+
+}
+
+function heuristic(b){
+
+let score=0;
+
+for(const pattern of winPatterns){
+
+const values=pattern.map(i=>b[i]);
+const oCount=values.filter(v=>v==="O").length;
+const xCount=values.filter(v=>v==="X").length;
+
+if(oCount>0 && xCount>0) continue;
+
+if(oCount>0){
+score+=Math.pow(10,oCount-1);
+}else if(xCount>0){
+score-=Math.pow(10,xCount-1);
+}
+
+}
+
+return score;
+
+}
+
+</script>
+
+</body>
+
+</html>
